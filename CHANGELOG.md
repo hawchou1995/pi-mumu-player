@@ -23,6 +23,11 @@ against the three target executables by parsing their PE section tables. Every
 write is preceded by a timestamped backup and an audit record, and a point whose
 original bytes are absent or not unique is skipped rather than forced.
 
+When nx_main holds no proxy at all, the plugin says so instead of failing inside
+the table; point the setting at a proxy file and it is copied into place first,
+with the guard marker checked and the previous file backed up, and the
+corrections are applied on top.
+
 **Dead guest recovery.** Recovers an instance whose guest Android framework has
 died, following the documented procedure: terminate the instance and its VM
 helpers, wait until MuMuManager reports the instance stopped, launch again, and

@@ -237,6 +237,55 @@ check('T7 restore returns the file to the legacy sha256 it came from', () => {
   return `restored ${report.sha256After.slice(0, 12)}`;
 });
 
+// --- T9: the fresh-machine path -------------------------------------------
+check('T9 a proxy can be installed from a source file, then corrected', () => {
+  assert.ok(realBytes, 'no installed proxy to derive test material from');
+  const legacy = toLegacy(realBytes, table);
+
+  // A source that is not the proxy must be refused outright.
+  const notProxy = fs.mkdtempSync(path.join(TMP_ROOT, 'notproxy-'));
+  const bogusSource = path.join(notProxy, 'something.dll');
+  fs.writeFileSync(bogusSource, Buffer.from('not a proxy at all, just some bytes'));
+  const emptyRoot = fs.mkdtempSync(path.join(TMP_ROOT, 'empty-'));
+  const emptyTarget = path.join(emptyRoot, 'nx_main', 'winhttp.dll');
+  const refused = patch.installProxy(bogusSource, emptyTarget, {});
+  assert.equal(refused.installed, false, 'a non-proxy source was installed');
+  assert.ok(refused.refused, 'no refusal reason for a non-proxy source');
+  assert.equal(fs.existsSync(emptyTarget), false, 'a non-proxy source created the target');
+
+  // A real proxy source dropped into a root that has nothing.
+  const fresh = fs.mkdtempSync(path.join(TMP_ROOT, 'fresh-'));
+  const freshTarget = path.join(fresh, 'nx_main', 'winhttp.dll');
+  assert.equal(fs.existsSync(freshTarget), false, 'the fresh root already had the target');
+  const sourcePath = path.join(fresh, 'incoming-proxy.dll');
+  fs.writeFileSync(sourcePath, legacy);
+  const installed = patch.installProxy(sourcePath, freshTarget, { keepBackups: true });
+  assert.equal(installed.installed, true, 'the proxy was not installed: ' + installed.refused);
+  assert.equal(installed.sha256TargetAfter, patch.sha256(legacy), 'installed bytes differ from the source');
+
+  // Installing the same source twice is a no-op, not a rewrite.
+  const sameAgain = patch.installProxy(sourcePath, freshTarget, {});
+  assert.equal(sameAgain.installed, false, 'a redundant install still wrote');
+  assert.equal(sameAgain.note, 'the target already matches the source');
+
+  const beforeRepair = patch.inspectFile(freshTarget, table);
+  assert.equal(beforeRepair.state, patch.STATE.LEGACY, 'state after install was ' + beforeRepair.state);
+  assert.equal(beforeRepair.markerPresent, true, 'the installed file does not carry the proxy marker');
+
+  const repaired = patch.applyFile(freshTarget, table, {});
+  assert.equal(repaired.wrote, true, 'the repair after install did not write');
+  assert.equal(repaired.sha256After, patch.sha256(realBytes), 'the repaired file is not byte-identical to the corrected one');
+  assert.equal(patch.inspectFile(freshTarget, table).state, patch.STATE.CORRECTED);
+
+  // Re-installing the legacy source over the corrected file is a real change, not
+  // a no-op: the operator asked for exactly that source to be put in place.
+  const reinstall = patch.installProxy(sourcePath, freshTarget, {});
+  assert.equal(reinstall.installed, true, 'a genuine re-install was skipped');
+  assert.equal(reinstall.sha256TargetAfter, patch.sha256(legacy), 'the re-install did not restore the source bytes');
+  return 'refused a non-proxy source, installed legacy ' + patch.sha256(legacy).slice(0, 12) +
+    ', repaired to ' + repaired.sha256After.slice(0, 12);
+});
+
 lines.push('');
 lines.push(failures === 0 ? `ALL PASS  ${lines.filter((line) => line.startsWith('PASS')).length} checks` : `${failures} CHECK(S) FAILED`);
 process.stdout.write(lines.join('\n') + '\n');

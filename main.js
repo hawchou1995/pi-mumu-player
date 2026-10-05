@@ -302,6 +302,45 @@ async function recoverDeadGuest(root, selector, confirmed) {
 }
 
 // ---------------------------------------------------------------------------
+// Proxy presence
+// ---------------------------------------------------------------------------
+
+// A stock MuMu install has no proxy in nx_main, so the correction table has
+// nothing to correct. When the operator has pointed at a proxy file, put it in
+// place first; otherwise say why the patch cannot proceed instead of failing
+// silently inside the table.
+function prepareProxy(root, settings, dryRun) {
+  const target = patchEngine.targetDllPath(root);
+  const current = patchEngine.inspectFile(target, patchTables());
+  if (current.exists && current.markerPresent) {
+    return { ready: true, state: current, install: null, reason: null };
+  }
+  const source = String((settings && settings.proxySourcePath) || '').trim();
+  if (!source) {
+    return {
+      ready: false,
+      state: current,
+      install: null,
+      reason: current.exists
+        ? 'the file in nx_main is not the winhttp proxy, and no proxy source is configured'
+        : 'there is no winhttp proxy in nx_main and no proxy source is configured',
+    };
+  }
+  const install = patchEngine.installProxy(source, target, {
+    dryRun: Boolean(dryRun),
+    keepBackups: !settings || settings.keepBackups !== 'off',
+  });
+  const after = patchEngine.inspectFile(target, patchTables());
+  const ready = Boolean(after.exists && after.markerPresent);
+  return {
+    ready,
+    state: after,
+    install,
+    reason: ready ? null : (install.refused || 'the proxy source could not be installed'),
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Agent tools
 // ---------------------------------------------------------------------------
 
@@ -468,11 +507,15 @@ function toolDefs() {
       async execute(args) {
         const root = await resolveRoot(args.root);
         const settings = await readSettings();
-        const target = patchEngine.targetDllPath(root);
-        const report = patchEngine.applyFile(target, patchTables(), {
-          dryRun: Boolean(args.dryRun),
-          keepBackups: settings.keepBackups !== 'off',
-        });
+        const dryRun = Boolean(args.dryRun);
+        const prepared = prepareProxy(root, settings, dryRun);
+        const report = prepared.ready
+          ? patchEngine.applyFile(patchEngine.targetDllPath(root), patchTables(), {
+            dryRun,
+            keepBackups: settings.keepBackups !== 'off',
+          })
+          : { refused: prepared.reason, wrote: false, counts: null, points: [] };
+        report.proxyInstall = prepared.install || null;
         report.runtime = patchEngine.verifyRuntime(root, patchTables());
         report.guardLog = guardLogSummary(root);
         return succeed(report);
@@ -627,14 +670,21 @@ async function onPanelInvoke(channel, payload) {
       case 'mumu.patchApply': {
         const root = await resolveRoot(args.root);
         const settings = await readSettings();
-        const report = patchEngine.applyFile(patchEngine.targetDllPath(root), patchTables(), {
-          dryRun: channel === 'mumu.patchDryRun',
-          keepBackups: settings.keepBackups !== 'off',
-        });
+        const dryRun = channel === 'mumu.patchDryRun';
+        const prepared = prepareProxy(root, settings, dryRun);
+        const report = prepared.ready
+          ? patchEngine.applyFile(patchEngine.targetDllPath(root), patchTables(), {
+            dryRun,
+            keepBackups: settings.keepBackups !== 'off',
+          })
+          : { refused: prepared.reason, wrote: false, counts: null, points: [] };
         const state = await panelState();
-        return Object.assign(state, { patchResult: report, guardLog: guardLogSummary(root) });
+        return Object.assign(state, {
+          patchResult: report,
+          proxyInstall: prepared.install || null,
+          guardLog: guardLogSummary(root),
+        });
       }
-
       case 'mumu.patchRestore': {
         const root = await resolveRoot(args.root);
         const report = patchEngine.restoreFile(patchEngine.targetDllPath(root), args.backup || null, {});
