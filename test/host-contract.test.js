@@ -156,8 +156,21 @@ async function run() {
     const result = await call('mumu_detect', {});
     const allowed = ['manual', 'process', 'registry', 'common-path'];
     assert.ok(allowed.includes(result.source), 'unexpected source: ' + result.source);
+    // At least one automatic source has to have produced something usable, and
+    // every source that was tried must be nameable from the four documented ones.
+    const scanned = result.scanned || {};
+    const sawSomething = Boolean(scanned.process)
+      || (Array.isArray(scanned.registry) && scanned.registry.length > 0)
+      || Number(scanned.commonPaths) > 0;
+    assert.ok(sawSomething, 'no automatic source produced anything to work from');
     const reasons = result.attempts.map((attempt) => attempt.source);
-    return 'source=' + result.source + ' attempted=[' + reasons.join(',') + ']';
+    for (const reason of reasons) {
+      assert.ok(allowed.includes(reason), 'a failed attempt named an unknown source: ' + reason);
+    }
+    return 'source=' + result.source
+      + ' process=' + (scanned.process ? 'yes' : 'no')
+      + ' registry=' + ((scanned.registry || []).length)
+      + ' commonPaths=' + (scanned.commonPaths || 0);
   });
 
   await check('A1.3 a nonexistent manual root is rejected and the previous root survives', async () => {
