@@ -101,6 +101,7 @@ The agent tools:
 node test/patch-core.test.js
 node test/patch-core.test.js "D:\Other\MuMuPlayer"
 python tools/i18n-gate.py
+node tools/publish.js --check
 ```
 
 The patch tests run every destructive case against a copy in the system temp
@@ -171,6 +172,7 @@ PI-Desktop 的 MuMu 安卓模拟器扩展。自动定位安装目录,驱动 MuMu
 ```
 node test/patch-core.test.js
 python tools/i18n-gate.py
+node tools/publish.js --check
 ```
 
 补丁测试的破坏性用例全部跑在系统临时目录里的副本上,**真安装只读**。
