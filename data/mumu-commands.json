@@ -1,0 +1,755 @@
+{
+  "schema": "mumu-manager-commands/1",
+  "capturedFrom": "C:\\Program Files\\Netease\\MuMuPlayer\\nx_main\\MuMuManager.exe",
+  "managerVersion": "6.8.2.0",
+  "topLevel": [
+    "version",
+    "info",
+    "create",
+    "clone",
+    "upgrade",
+    "delete",
+    "rename",
+    "import",
+    "export",
+    "control",
+    "setting",
+    "adb",
+    "simulation",
+    "sort",
+    "driver",
+    "log",
+    "sh",
+    "main"
+  ],
+  "commandCount": 35,
+  "commands": [
+    {
+      "name": "version",
+      "summary": "Get player version.",
+      "usage": "version",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Get player version.\n\nUSAGE: version\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "info",
+      "summary": "Get players info.",
+      "usage": "info [--vmindex <vmindex>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Get players info.\n\nUSAGE: info [--vmindex <vmindex>]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "create",
+      "summary": "Create players.",
+      "usage": "create [--vmindex <vmindex>] [--number <number>] [--mini] [--version <android_version>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-v, --vmindex <vmindex>",
+          "text": "The index of target player."
+        },
+        {
+          "flags": "-n, --number <number>",
+          "text": "Number of action run."
+        },
+        {
+          "flags": "-m, --mini",
+          "text": "Set mini disk mode for data disk."
+        },
+        {
+          "flags": "-ver, --version <android_version>",
+          "text": "Android engine version: auto, 12, or 15."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Create players.\n\nUSAGE: create [--vmindex <vmindex>] [--number <number>] [--mini] [--version <android_version>]\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n  -n, --number <number>              Number of action run.\n  -m, --mini                         Set mini disk mode for data disk.\n  -ver, --version <android_version>  Android engine version: auto, 12, or 15."
+    },
+    {
+      "name": "clone",
+      "summary": "Clone players. (alias: copy)",
+      "usage": "clone [--vmindex <vmindex>] [--number <number>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-n, --number <number>",
+          "text": "Number of action run."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Clone players. (alias: copy)\n\nUSAGE: clone [--vmindex <vmindex>] [--number <number>]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -n, --number <number>              Number of action run."
+    },
+    {
+      "name": "upgrade",
+      "summary": "Upgrade player Android version.",
+      "usage": "upgrade [--vmindex <vmindex>] [--android_version <android_version>] [--status] [--cancel] [--no-keep]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information. --android_version <android_version>Target Android engine version."
+        },
+        {
+          "flags": "--status",
+          "text": "Get Android upgrade progress and state."
+        },
+        {
+          "flags": "--cancel",
+          "text": "Cancel Android upgrade engine download."
+        },
+        {
+          "flags": "--no-keep",
+          "text": "Replace source player without keeping data."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Upgrade player Android version.\n\nUSAGE: upgrade [--vmindex <vmindex>] [--android_version <android_version>] [--status] [--cancel] [--no-keep]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n\nOPTIONS:\n  -h, --help                         Show help information.\n  --android_version <android_version>Target Android engine version.\n  --status                           Get Android upgrade progress and state.\n  --cancel                           Cancel Android upgrade engine download.\n  --no-keep                          Replace source player without keeping data."
+    },
+    {
+      "name": "delete",
+      "summary": "Delete players.",
+      "usage": "delete [--vmindex <vmindex>] [--version <android_version>] [--no_wait]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-ver, --version <android_version>",
+          "text": "Android engine version: auto, 12, or 15."
+        },
+        {
+          "flags": "--no_wait",
+          "text": "Do not wait for player deletion to finish."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Delete players.\n\nUSAGE: delete [--vmindex <vmindex>] [--version <android_version>] [--no_wait]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -ver, --version <android_version>  Android engine version: auto, 12, or 15.\n  --no_wait                          Do not wait for player deletion to finish."
+    },
+    {
+      "name": "rename",
+      "summary": "Rename players.",
+      "usage": "rename [--vmindex <vmindex>] [--name <name>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Rename players.\n\nUSAGE: rename [--vmindex <vmindex>] [--name <name>]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n  -n, --name <name>                  Player name.\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "import",
+      "summary": "Import .mumudata files.",
+      "usage": "import [--path <path>] [--number <number>] [--version <android_version>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-n, --number <number>",
+          "text": "Number of action run."
+        },
+        {
+          "flags": "-ver, --version <android_version>",
+          "text": "Android engine version: auto, 12, or 15."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Import .mumudata files.\n\nUSAGE: import [--path <path>] [--number <number>] [--version <android_version>]\n\nARGUMENTS:\n  -p, --path <path>                  The .mumudata file path. ((one/more)) \n\nOPTIONS:\n  -h, --help                         Show help information.\n  -n, --number <number>              Number of action run.\n  -ver, --version <android_version>  Android engine version: auto, 12, or 15."
+    },
+    {
+      "name": "export",
+      "summary": "Export players as .mumudata files.",
+      "usage": "export [--vmindex <vmindex>] [--dir <dir>] [--name <name>] [--zip] [--version <android_version>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-n, --name <name>",
+          "text": "The .mumudata file name."
+        },
+        {
+          "flags": "-z, --zip",
+          "text": "Use compressed file format."
+        },
+        {
+          "flags": "-ver, --version <android_version>",
+          "text": "Android engine version: auto, 12, or 15."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Export players as .mumudata files.\n\nUSAGE: export [--vmindex <vmindex>] [--dir <dir>] [--name <name>] [--zip] [--version <android_version>]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n  -d, --dir <dir>                    The .mumudata file directory.\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -n, --name <name>                  The .mumudata file name.\n  -z, --zip                          Use compressed file format.\n  -ver, --version <android_version>  Android engine version: auto, 12, or 15."
+    },
+    {
+      "name": "control",
+      "summary": "Control players.",
+      "usage": "control [--vmindex <vmindex>] [--version <android_version>] <subcommand>",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-ver, --version <android_version>",
+          "text": "Android engine version: auto, 12, or 15."
+        }
+      ],
+      "nested": [
+        {
+          "name": "launch",
+          "summary": "Launch players."
+        },
+        {
+          "name": "shutdown",
+          "summary": "Shutdown players."
+        },
+        {
+          "name": "restart",
+          "summary": "Restart players."
+        },
+        {
+          "name": "show_window",
+          "summary": "Show player windows."
+        },
+        {
+          "name": "hide_window",
+          "summary": "Hide player windows."
+        },
+        {
+          "name": "layout_window",
+          "summary": "Layout player windows position and size."
+        },
+        {
+          "name": "app",
+          "summary": "Control app in players."
+        },
+        {
+          "name": "tool",
+          "summary": "Control toolbar in players."
+        },
+        {
+          "name": "shortcut",
+          "summary": "Control shortcut in players."
+        }
+      ],
+      "help": "OVERVIEW: Control players.\n\nUSAGE: control [--vmindex <vmindex>] [--version <android_version>] <subcommand>\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -ver, --version <android_version>  Android engine version: auto, 12, or 15.\n\nSUBCOMMANDS:\n  launch                             Launch players.\n  shutdown                           Shutdown players.\n  restart                            Restart players.\n  show_window                        Show player windows.\n  hide_window                        Hide player windows.\n  layout_window                      Layout player windows position and size.\n  app                                Control app in players.\n  tool                               Control toolbar in players.\n  shortcut                           Control shortcut in players."
+    },
+    {
+      "name": "control launch",
+      "summary": "Launch players.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} launch [--package <package>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-pkg, --package <package>",
+          "text": "App package bundle id."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Launch players.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} launch [--package <package>]\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -pkg, --package <package>          App package bundle id."
+    },
+    {
+      "name": "control shutdown",
+      "summary": "Shutdown players.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} shutdown",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Shutdown players.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} shutdown\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "control restart",
+      "summary": "Restart players.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} restart",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Restart players.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} restart\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "control show_window",
+      "summary": "Show player windows.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} show_window",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Show player windows.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} show_window\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "control hide_window",
+      "summary": "Hide player windows.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} hide_window",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Hide player windows.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} hide_window\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "control layout_window",
+      "summary": "Layout player windows position and size.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} layout_window [--pos_x <pos_x>] [--pos_y <pos_y>] [--size_w <size_w>] [--size_h <size_h>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-px, --pos_x <pos_x>",
+          "text": "The X-axis of window position, screen left is zero."
+        },
+        {
+          "flags": "-py, --pos_y <pos_y>",
+          "text": "The Y-axis of window position, screen top is zero."
+        },
+        {
+          "flags": "-sw, --size_w <size_w>",
+          "text": "Width of window size."
+        },
+        {
+          "flags": "-sh, --size_h <size_h>",
+          "text": "Height of window size."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Layout player windows position and size.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} layout_window [--pos_x <pos_x>] [--pos_y <pos_y>] [--size_w <size_w>] [--size_h <size_h>]\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -px, --pos_x <pos_x>               The X-axis of window position, screen left is zero.\n  -py, --pos_y <pos_y>               The Y-axis of window position, screen top is zero.\n  -sw, --size_w <size_w>             Width of window size.\n  -sh, --size_h <size_h>             Height of window size."
+    },
+    {
+      "name": "control app",
+      "summary": "Control app in players.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} app <subcommand>",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [
+        {
+          "name": "install",
+          "summary": "Install app in players."
+        },
+        {
+          "name": "uninstall",
+          "summary": "Uninstall app in players."
+        },
+        {
+          "name": "launch",
+          "summary": "Launch app in players."
+        },
+        {
+          "name": "close",
+          "summary": "Close app in players."
+        },
+        {
+          "name": "info",
+          "summary": "Get app info in players."
+        }
+      ],
+      "help": "OVERVIEW: Control app in players.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} app <subcommand>\n\nOPTIONS:\n  -h, --help                         Show help information.\n\nSUBCOMMANDS:\n  install                            Install app in players.\n  uninstall                          Uninstall app in players.\n  launch                             Launch app in players.\n  close                              Close app in players.\n  info                               Get app info in players."
+    },
+    {
+      "name": "control tool",
+      "summary": "Control toolbar in players.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} tool <subcommand>",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [
+        {
+          "name": "func",
+          "summary": "Trigger toolbar function in players."
+        },
+        {
+          "name": "cmd",
+          "summary": "Run toolbar cmd in players."
+        },
+        {
+          "name": "downcpu",
+          "summary": "Set CPU execute cap in players."
+        },
+        {
+          "name": "location",
+          "summary": "Update location in players."
+        },
+        {
+          "name": "gyro",
+          "summary": "Change gravity sensing in players."
+        }
+      ],
+      "help": "OVERVIEW: Control toolbar in players.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} tool <subcommand>\n\nOPTIONS:\n  -h, --help                         Show help information.\n\nSUBCOMMANDS:\n  func                               Trigger toolbar function in players.\n  cmd                                Run toolbar cmd in players.\n  downcpu                            Set CPU execute cap in players.\n  location                           Update location in players.\n  gyro                               Change gravity sensing in players."
+    },
+    {
+      "name": "control shortcut",
+      "summary": "Control shortcut in players.",
+      "usage": "{control [--vmindex <vmindex>] [--version <android_version>]} shortcut <subcommand>",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [
+        {
+          "name": "create",
+          "summary": "Create shortcut in desktop for players."
+        },
+        {
+          "name": "delete",
+          "summary": "Delete shortcut in desktop for players."
+        }
+      ],
+      "help": "OVERVIEW: Control shortcut in players.\n\nUSAGE: {control [--vmindex <vmindex>] [--version <android_version>]} shortcut <subcommand>\n\nOPTIONS:\n  -h, --help                         Show help information.\n\nSUBCOMMANDS:\n  create                             Create shortcut in desktop for players.\n  delete                             Delete shortcut in desktop for players."
+    },
+    {
+      "name": "setting",
+      "summary": "Config players.",
+      "usage": "setting [--vmindex <vmindex>] [--key <key>] [--value <value>] [--all] [--all_writable] [--info] [--path <path>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-v, --vmindex <vmindex>",
+          "text": "The index of target player. (If not specified, global setting will be set.)"
+        },
+        {
+          "flags": "-k, --key <key>",
+          "text": "Key of player setting. ((one/more))"
+        },
+        {
+          "flags": "-val, --value <value>",
+          "text": "Value of player setting key. ((one/more))"
+        },
+        {
+          "flags": "-a, --all",
+          "text": "All keys of player setting."
+        },
+        {
+          "flags": "-aw, --all_writable",
+          "text": "All writable keys of player setting."
+        },
+        {
+          "flags": "-i, --info",
+          "text": "Show info for player setting key."
+        },
+        {
+          "flags": "-p, --path <path>",
+          "text": "The .json file path (UTF-8) to change player setting."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Config players.\n\nUSAGE: setting [--vmindex <vmindex>] [--key <key>] [--value <value>] [--all] [--all_writable] [--info] [--path <path>]\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -v, --vmindex <vmindex>            The index of target player. (If not specified, global setting will be set.)\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n  -k, --key <key>                    Key of player setting. ((one/more)) \n\n    Discussion:\n    1. Select a key for player setting: \n        --key key\n    2. Select multi keys for player setting: \n        --key key1 --key key2 --key key3 ...\n\n  -val, --value <value>              Value of player setting key. ((one/more)) \n\n    Discussion:\n    1. Set a value for a setting key: \n        --key key --value value\n    2. Set a empty value for a setting key: \n        --key key --value __null__\n    3. Set multi values for multi setting keys: \n        --key key1 --value value1 --key key2 --value value2 ...\n\n  -a, --all                          All keys of player setting.\n  -aw, --all_writable                All writable keys of player setting.\n  -i, --info                         Show info for player setting key.\n  -p, --path <path>                  The .json file path (UTF-8) to change player setting.\n\n    Discussion:\n    1. Change player setting for a .json file: \n        --path path\\file.json\n    2. If use path param, key-value params will not take effect: \n        --key key --value value --path path\\file.json"
+    },
+    {
+      "name": "adb",
+      "summary": "Run adb cmd for players.",
+      "usage": "adb [--vmindex <vmindex>] [--cmd <cmd>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-c, --cmd <cmd>",
+          "text": "Command line arguments."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Run adb cmd for players.\n\nUSAGE: adb [--vmindex <vmindex>] [--cmd <cmd>]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -c, --cmd <cmd>                    Command line arguments.\n\n    Discussion:\n    1. connect: Connect adb to player. \n        == adb connect <host>:<ip>\n    2. disconnect: Disconnect adb to player. \n        == adb disconnect <host>:<ip>\n    3. \"getprop ro.opengles.version\": Get android system props in player. \n        == adb -s <host>:<ip> shell getprop ro.opengles.version\n    4. \"setprop ro.opengles.version xxx\": Set android system props in player. \n        == adb -s <host>:<ip> shell setprop ro.opengles.version xxx\n    5. \"input_text xxx\": Input text to player.\n        == adb -s <host>:<ip> shell input text xxx\n    6. Input keyevent to player:\n        go_back == adb -s <host>:<ip> shell input keyevent 4\n        go_home == adb -s <host>:<ip> shell input keyevent 3\n        go_task == adb -s <host>:<ip> shell input keyevent 187\n        key_delete == adb -s <host>:<ip> shell input keyevent 67\n        key_enter == adb -s <host>:<ip> shell input keyevent 66\n        key_space == adb -s <host>:<ip> shell input keyevent 62\n        volume_up == adb -s <host>:<ip> shell input keyevent 25\n        volume_down == adb -s <host>:<ip> shell input keyevent 24\n        volume_mute == adb -s <host>:<ip> shell input keyevent 164"
+    },
+    {
+      "name": "simulation",
+      "summary": "Change simulated properties in players.",
+      "usage": "simulation [--vmindex <vmindex>] [--simu_key <simu_key>] [--simu_value <simu_value>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-sk, --simu_key <simu_key>",
+          "text": "Key of simulated properties."
+        },
+        {
+          "flags": "-sv, --simu_value <simu_value>",
+          "text": "Value of simulated properties."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Change simulated properties in players.\n\nUSAGE: simulation [--vmindex <vmindex>] [--simu_key <simu_key>] [--simu_value <simu_value>]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -sk, --simu_key <simu_key>         Key of simulated properties.\n\n    Discussion:\n    1. android_id: Simulate Android ID properties.\n    2. mac_address: Simulate MAC properties.\n    3. imei: Simulate IMEI properties.\n\n  -sv, --simu_value <simu_value>     Value of simulated properties.\n\n    Discussion:\n    1. __null__: set value to empty"
+    },
+    {
+      "name": "sort",
+      "summary": "Layout player windows to sort.",
+      "usage": "sort",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Layout player windows to sort.\n\nUSAGE: sort\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "driver",
+      "summary": "Manage player drivers.",
+      "usage": "driver <subcommand>",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [
+        {
+          "name": "install",
+          "summary": "Install driver for players."
+        },
+        {
+          "name": "uninstall",
+          "summary": "Uninstall driver for players."
+        }
+      ],
+      "help": "OVERVIEW: Manage player drivers.\n\nUSAGE: driver <subcommand>\n\nOPTIONS:\n  -h, --help                         Show help information.\n\nSUBCOMMANDS:\n  install                            Install driver for players.\n  uninstall                          Uninstall driver for players."
+    },
+    {
+      "name": "driver install",
+      "summary": "Install driver for players.",
+      "usage": "{driver} install [--name <name>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Install driver for players.\n\nUSAGE: {driver} install [--name <name>]\n\nARGUMENTS:\n  -n, --name <name>                  Driver name. (values: lwf)\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "driver uninstall",
+      "summary": "Uninstall driver for players.",
+      "usage": "{driver} uninstall [--name <name>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Uninstall driver for players.\n\nUSAGE: {driver} uninstall [--name <name>]\n\nARGUMENTS:\n  -n, --name <name>                  Driver name. (values: lwf)\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "log",
+      "summary": "Control manager log.",
+      "usage": "log <subcommand>",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [
+        {
+          "name": "on",
+          "summary": "Log on for manager."
+        },
+        {
+          "name": "off",
+          "summary": "Log off for manager."
+        }
+      ],
+      "help": "OVERVIEW: Control manager log.\n\nUSAGE: log <subcommand>\n\nOPTIONS:\n  -h, --help                         Show help information.\n\nSUBCOMMANDS:\n  on                                 Log on for manager.\n  off                                Log off for manager."
+    },
+    {
+      "name": "log on",
+      "summary": "Log on for manager.",
+      "usage": "{log} on",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Log on for manager.\n\nUSAGE: {log} on\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "log off",
+      "summary": "Log off for manager.",
+      "usage": "{log} off",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Log off for manager.\n\nUSAGE: {log} off\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "sh",
+      "summary": "Run player shell.",
+      "usage": "sh [--vmindex <vmindex>] [--cmd <cmd>]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-c, --cmd <cmd>",
+          "text": "cmd of player shell."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Run player shell.\n\nUSAGE: sh [--vmindex <vmindex>] [--cmd <cmd>]\n\nARGUMENTS:\n  -v, --vmindex <vmindex>            The index of target player.\n\n    Discussion:\n    1. Select a index of player:\n        --vmindex 1\n    2. Select multiple indexs of players:\n        --vmindex 3,5,6,7\n    3. Select all indexs of players:\n        --vmindex all\n\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -c, --cmd <cmd>                    cmd of player shell.\n\n    Discussion:\n    1. --cmd \"getprop ro.opengles.version\": Get android system props in player. \n        == adb -s <host>:<ip> shell getprop ro.opengles.version\n    2. --cmd \"setprop ro.opengles.version xxx\": Set android system props in player. \n        == adb -s <host>:<ip> shell setprop ro.opengles.version xxx\n    3. --cmd \"input_text xxx\": Input text to player.\n        == adb -s <host>:<ip> shell input text xxx\n    4. --cmd <keyevent>: Input keyevent to player, keyevent like:\n        go_back == adb -s <host>:<ip> shell input keyevent 4\n        go_home == adb -s <host>:<ip> shell input keyevent 3\n        go_task == adb -s <host>:<ip> shell input keyevent 187\n        key_delete == adb -s <host>:<ip> shell input keyevent 67\n        key_enter == adb -s <host>:<ip> shell input keyevent 66\n        key_space == adb -s <host>:<ip> shell input keyevent 62\n        volume_up == adb -s <host>:<ip> shell input keyevent 25\n        volume_down == adb -s <host>:<ip> shell input keyevent 24\n        volume_mute == adb -s <host>:<ip> shell input keyevent 164"
+    },
+    {
+      "name": "main",
+      "summary": "Control main application.",
+      "usage": "main <subcommand>",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [
+        {
+          "name": "launch",
+          "summary": "Launch main application."
+        },
+        {
+          "name": "close",
+          "summary": "Close main application."
+        },
+        {
+          "name": "kill",
+          "summary": "Kill main application."
+        },
+        {
+          "name": "engine",
+          "summary": "Control Android engine."
+        }
+      ],
+      "help": "OVERVIEW: Control main application.\n\nUSAGE: main <subcommand>\n\nOPTIONS:\n  -h, --help                         Show help information.\n\nSUBCOMMANDS:\n  launch                             Launch main application.\n  close                              Close main application.\n  kill                               Kill main application.\n  engine                             Control Android engine."
+    },
+    {
+      "name": "main launch",
+      "summary": "Launch main application.",
+      "usage": "{main} launch [--params <params>] [--admin]",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        },
+        {
+          "flags": "-p, --params <params>",
+          "text": "Params for main launch."
+        },
+        {
+          "flags": "--admin",
+          "text": "Launch main as admin."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Launch main application.\n\nUSAGE: {main} launch [--params <params>] [--admin]\n\nOPTIONS:\n  -h, --help                         Show help information.\n  -p, --params <params>              Params for main launch.\n  --admin                            Launch main as admin."
+    },
+    {
+      "name": "main close",
+      "summary": "Close main application.",
+      "usage": "{main} close",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Close main application.\n\nUSAGE: {main} close\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "main kill",
+      "summary": "Kill main application.",
+      "usage": "{main} kill",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [],
+      "help": "OVERVIEW: Kill main application.\n\nUSAGE: {main} kill\n\nOPTIONS:\n  -h, --help                         Show help information."
+    },
+    {
+      "name": "main engine",
+      "summary": "Control Android engine.",
+      "usage": "{main} engine <subcommand>",
+      "options": [
+        {
+          "flags": "-h, --help",
+          "text": "Show help information."
+        }
+      ],
+      "nested": [
+        {
+          "name": "install",
+          "summary": "Install Android engine."
+        },
+        {
+          "name": "cancel",
+          "summary": "Cancel Android engine install download."
+        },
+        {
+          "name": "state",
+          "summary": "Get Android engine state."
+        }
+      ],
+      "help": "OVERVIEW: Control Android engine.\n\nUSAGE: {main} engine <subcommand>\n\nOPTIONS:\n  -h, --help                         Show help information.\n\nSUBCOMMANDS:\n  install                            Install Android engine.\n  cancel                             Cancel Android engine install download.\n  state                              Get Android engine state."
+    }
+  ]
+}

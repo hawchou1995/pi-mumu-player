@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="pi-plugin-chrome" content="v3" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' file:; style-src 'self' file: 'unsafe-inline'; img-src 'self' file: data:; font-src 'self' file:; connect-src 'none';" />
+    <title>MuMu Player Toolkit</title>
+    <link rel="stylesheet" href="./panel.css" />
+  </head>
+  <body>
+    <header class="titlebar">
+      <h1 id="appTitle"></h1>
+      <span class="badge" id="rootBadge"></span>
+      <div class="spacer"></div>
+      <label class="toggle">
+        <input type="checkbox" id="liveControls" />
+        <span id="liveTitle"></span>
+      </label>
+    </header>
+
+    <div class="scroller">
+      <p class="lede" id="lede"></p>
+      <p class="hint" id="liveHint"></p>
+
+      <div class="notice" id="notFound" hidden>
+        <p id="notFoundLede"></p>
+      </div>
+
+      <section class="card">
+        <h2 id="envHeading"></h2>
+        <dl class="kv">
+          <dt id="envRootLabel"></dt>
+          <dd id="envRootValue" class="mono"></dd>
+          <dt id="envSourceLabel"></dt>
+          <dd id="envSourceValue"></dd>
+          <dt id="envManagerLabel"></dt>
+          <dd id="envManagerValue" class="mono"></dd>
+        </dl>
+        <label class="field">
+          <span id="envManualLabel"></span>
+          <input id="manualRoot" type="text" spellcheck="false" autocomplete="off" />
+        </label>
+        <p class="hint" id="envManualHint"></p>
+        <div class="actions">
+          <button id="btnRedetect" type="button"></button>
+          <button id="btnSave" type="button" class="primary"></button>
+          <button id="btnClear" type="button"></button>
+        </div>
+        <p class="hint" id="rootResult" hidden></p>
+      </section>
+
+      <section class="card">
+        <h2 id="instHeading"></h2>
+        <table class="grid">
+          <thead>
+            <tr>
+              <th id="colIndex"></th>
+              <th id="colName"></th>
+              <th id="colState"></th>
+              <th id="colAndroid"></th>
+              <th id="colAdb"></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="instBody"></tbody>
+        </table>
+        <p class="hint" id="instEmpty" hidden></p>
+      </section>
+
+      <section class="card">
+        <h2 id="patchHeading"></h2>
+        <dl class="kv">
+          <dt id="patchTargetLabel"></dt>
+          <dd id="patchTargetValue" class="mono"></dd>
+          <dt id="patchStateLabel"></dt>
+          <dd id="patchStateValue"></dd>
+          <dt id="patchSourceLabel"></dt>
+          <dd id="patchSourceValue" class="mono"></dd>
+          <dt id="patchTableLabel"></dt>
+          <dd id="patchTableValue" class="mono"></dd>
+          <dt id="patchRuntimeLabel"></dt>
+          <dd id="patchRuntimeValue" class="mono"></dd>
+        </dl>
+        <div class="actions">
+          <button id="btnDryRun" type="button"></button>
+          <button id="btnApply" type="button" class="primary"></button>
+          <button id="btnRestore" type="button" class="danger"></button>
+        </div>
+        <p class="hint" id="patchResult" hidden></p>
+      </section>
+
+      <section class="card">
+        <h2 id="cmdHeading"></h2>
+        <label class="field">
+          <span id="cmdSubcommandLabel"></span>
+          <select id="cmdSelect"></select>
+        </label>
+        <label class="field">
+          <span id="cmdArgsLabel"></span>
+          <input id="cmdArgs" type="text" spellcheck="false" autocomplete="off" />
+        </label>
+        <p class="hint" id="cmdArgsHint"></p>
+        <div class="actions">
+          <button id="btnRun" type="button" class="primary"></button>
+          <button id="btnHelp" type="button"></button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 id="recoveryHeading"></h2>
+        <p class="hint" id="recoveryLede"></p>
+        <p class="hint alert" id="recoverHint"></p>
+        <div class="actions">
+          <button id="btnRecover" type="button" class="danger"></button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 id="outputHeading"></h2>
+        <pre class="console" id="output"></pre>
+        <p class="hint" id="outputEmpty"></p>
+      </section>
+
+      <p class="hint" id="footer"></p>
+    </div>
+
+    <script src="./copy.js"></script>
+    <script src="./panel.js"></script>
+  </body>
+</html>

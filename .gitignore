@@ -1,0 +1,11 @@
+# Runtime output
+*.log
+node_modules/
+__pycache__/
+
+# Patch engine leaves these beside the target file, never in the repo
+*.mumu-backup-*.dll
+*.mumu-backup-*.json
+
+# Local test scratch
+test/.tmp/

@@ -1,0 +1,411 @@
+{
+  "schemaVersion": 1,
+  "id": "hawchou.mumu-player",
+  "name": "MuMu Player Toolkit",
+  "version": "0.1.0",
+  "description": "Locate a MuMu Android emulator installation, drive the whole MuMuManager command surface, and keep the winhttp proxy VIP patch table in sync with the installed build. Detection is automatic with a manual root override as the fallback. The patch engine backs up before every write, skips any point whose original bytes do not match, and can restore the previous file.",
+  "author": "hawchou1995",
+  "license": "MIT",
+  "homepage": "https://github.com/hawchou1995/pi-mumu-player",
+  "engines": {
+    "piDesktop": ">=0.14.0"
+  },
+  "permissions": [
+    "ui.panel",
+    "agent.tool.register"
+  ],
+  "activationEvents": [
+    "onStartup",
+    "onCommand:hawchou.mumu-player.open"
+  ],
+  "categories": [
+    "productivity",
+    "developer-tools"
+  ],
+  "i18n": {
+    "en": {
+      "name": "MuMu Player Toolkit",
+      "description": "Locate a MuMu Android emulator installation, drive the whole MuMuManager command surface, and keep the winhttp proxy VIP patch table in sync with the installed build. Detection is automatic with a manual root override as the fallback. The patch engine backs up before every write, skips any point whose original bytes do not match, and can restore the previous file.",
+      "safetyNotes": "Runs the locally installed MuMuManager.exe and adb.exe, starts and stops emulator instances, and can write to nx_main\\winhttp.dll. Every write is preceded by a timestamped backup in the same folder, and any patch point whose original bytes do not match is skipped rather than forced. Offline point verification only reads the target executables. No network access, and nothing leaves this machine."
+    },
+    "zh-CN": {
+      "name": "MuMu 模拟器工具箱",
+      "description": "自动定位 MuMu 安卓模拟器安装目录，驱动 MuMuManager 的完整指令面，并让 winhttp 代理的 VIP 补丁点位表与已安装的版本保持一致。目录识别优先自动探测，手工指定根目录作为兜底。补丁引擎在每次写入前先落备份，原始字节不匹配的点位一律跳过，并支持还原上一份文件。",
+      "safetyNotes": "会执行本机已安装的 MuMuManager.exe 与 adb.exe，会启动和停止模拟器实例，并可能写入 nx_main\\winhttp.dll。每次写入前都会在同目录留下带时间戳的备份；原始字节不匹配的点位一律跳过，绝不强行覆写。离线点位校验只读取目标可执行文件。不联网，数据不离开本机。"
+    }
+  },
+  "safetyNotes": "Runs the locally installed MuMuManager.exe and adb.exe, starts and stops emulator instances, and can write to nx_main\\winhttp.dll. Every write is preceded by a timestamped backup in the same folder, and any patch point whose original bytes do not match is skipped rather than forced. Offline point verification only reads the target executables. No network access, and nothing leaves this machine.",
+  "main": "main.js",
+  "ui": {
+    "panel": "renderer/index.html",
+    "title": {
+      "en": "MuMu Player Toolkit",
+      "zh-CN": "MuMu 模拟器工具箱"
+    },
+    "width": 860,
+    "height": 880
+  },
+  "contributes": {
+    "commands": [
+      {
+        "id": "hawchou.mumu-player.open",
+        "title": "MuMu Player Toolkit: Open Panel / 打开面板",
+        "keywords": [
+          "mumu",
+          "emulator",
+          "android",
+          "模拟器",
+          "安卓",
+          "vip",
+          "patch"
+        ],
+        "category": "Productivity"
+      }
+    ],
+    "settings": [
+      {
+        "key": "mumuRoot",
+        "type": "string",
+        "title": "Manual MuMu root / 手工指定 MuMu 根目录",
+        "description": "Absolute path to the MuMu install root, the folder that contains nx_main. Leave empty to use automatic detection. 手工指定 MuMu 安装根目录，即包含 nx_main 的那个文件夹。留空则使用自动探测。",
+        "default": ""
+      },
+      {
+        "key": "proxySourcePath",
+        "type": "string",
+        "title": "Proxy source file / 代理源文件",
+        "description": "Optional. Path to a winhttp proxy DLL to install into nx_main when the folder has none. Leave empty to only report the missing proxy. 可选。当 nx_main 里没有代理时，用于安装的 winhttp 代理 DLL 路径。留空则只报告缺失，不做安装。",
+        "default": ""
+      },
+      {
+        "key": "keepBackups",
+        "type": "select",
+        "title": "Keep backups / 保留备份",
+        "description": "Write a timestamped backup beside the target before any patch. 打补丁前在目标旁边留一份带时间戳的备份。",
+        "default": "on",
+        "enum": [
+          {
+            "label": "On / 开启",
+            "value": "on"
+          },
+          {
+            "label": "Off / 关闭",
+            "value": "off"
+          }
+        ]
+      }
+    ],
+    "agentTools": [
+      {
+        "name": "mumu_detect",
+        "description": "Locate the MuMu Android emulator installation. Tries the manual override from settings first, then a running MuMu process, then the uninstall registry entry, then the well-known paths, in that order. Reports the root folder, which source won, the MuMuManager path, and the manager version. Reads only.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "useManual": {
+              "type": "boolean",
+              "description": "When false, ignore the manual override and report what automatic detection alone finds."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_list_instances",
+        "description": "List every MuMu emulator instance with its index, name, running state, Android version and adb port, by running MuMuManager info. Reads only.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "vmIndex": {
+              "type": "string",
+              "description": "Instance selector such as 0, 3,5,6,7 or all. Defaults to all."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_setting_get",
+        "description": "Read MuMu player settings through MuMuManager setting. Use all for every key, allWritable for the writable subset, or a single key. Reads only.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "vmIndex": {
+              "type": "string",
+              "description": "Instance selector such as 0 or all. Omit for the global scope."
+            },
+            "key": {
+              "type": "string",
+              "description": "A single setting key. Mutually exclusive with all and allWritable."
+            },
+            "all": {
+              "type": "boolean",
+              "description": "Return every key."
+            },
+            "allWritable": {
+              "type": "boolean",
+              "description": "Return every writable key."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_patch_status",
+        "description": "Report the VIP patch state without writing anything. Classifies nx_main\\winhttp.dll as absent, not-a-proxy, proxy-6.8.1-flavour or proxy-6.8.2-corrected, gives per-point applied/already/mismatch/skipped/gone counts for the file patch table, and separately verifies the runtime point table against the target executables by reading their bytes at each RVA. Reads only.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "root": {
+              "type": "string",
+              "description": "MuMu root folder to inspect. Omit to use the detected one."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_command_reference",
+        "description": "Return the MuMuManager command reference that ships with this plugin: the eighteen top-level subcommands, their nested subcommands, and the captured help text for each. Reads only.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "subcommand": {
+              "type": "string",
+              "description": "Return only this subcommand's help. Omit for the index of all eighteen."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_manager",
+        "description": "Run any MuMuManager subcommand with raw arguments and return exit code, stdout and stderr. This is the complete command surface: version, info, create, clone, upgrade, delete, rename, import, export, control, setting, adb, simulation, sort, driver, log, sh, main. Use mumu_manager_help to discover flags first. Writes to the emulator installation.",
+        "risk": "high",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "subcommand": {
+              "type": "string",
+              "description": "One of the eighteen top-level subcommands."
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Arguments passed through unchanged, for example [\"-v\",\"0\",\"launch\"]."
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "description": "Kill the call after this many milliseconds. Defaults to 60000."
+            }
+          },
+          "required": [
+            "subcommand"
+          ]
+        }
+      },
+      {
+        "name": "mumu_manager_help",
+        "description": "Run MuMuManager with -h for one subcommand and return its verbatim help text. Use it to learn the flags before calling mumu_manager. Reads only.",
+        "risk": "low",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "subcommand": {
+              "type": "string",
+              "description": "Top-level subcommand, or a nested one such as \"control launch\" or \"main engine\"."
+            }
+          },
+          "required": [
+            "subcommand"
+          ]
+        }
+      },
+      {
+        "name": "mumu_instance_action",
+        "description": "Launch, shutdown or restart one or more emulator instances through MuMuManager control. Starts and stops emulator processes.",
+        "risk": "high",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "enum": [
+                "launch",
+                "shutdown",
+                "restart",
+                "show_window",
+                "hide_window"
+              ]
+            },
+            "vmIndex": {
+              "type": "string",
+              "description": "Instance selector such as 0, 3,5,6,7 or all. Defaults to 0."
+            }
+          },
+          "required": [
+            "action"
+          ]
+        }
+      },
+      {
+        "name": "mumu_shell",
+        "description": "Run a command inside a running emulator instance, either through MuMuManager sh or through adb. sh understands the shortcuts input_text, go_back, go_home, go_task, key_enter and the volume keys. Executes arbitrary commands inside the guest.",
+        "risk": "high",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "cmd": {
+              "type": "string",
+              "description": "Command to run, for example \"getprop ro.product.cpu.abi\"."
+            },
+            "via": {
+              "type": "string",
+              "enum": [
+                "sh",
+                "adb"
+              ],
+              "description": "Channel to use. Defaults to sh."
+            },
+            "vmIndex": {
+              "type": "string",
+              "description": "Instance selector. Defaults to 0."
+            },
+            "timeoutMs": {
+              "type": "integer",
+              "description": "Kill the call after this many milliseconds. Defaults to 30000."
+            }
+          },
+          "required": [
+            "cmd"
+          ]
+        }
+      },
+      {
+        "name": "mumu_setting_set",
+        "description": "Write one or more MuMu player settings through MuMuManager setting. Changes emulator configuration.",
+        "risk": "high",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "vmIndex": {
+              "type": "string",
+              "description": "Instance selector such as 0 or all. Omit for the global scope."
+            },
+            "pairs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "key",
+                  "value"
+                ]
+              },
+              "description": "Key and value pairs applied in order."
+            }
+          },
+          "required": [
+            "pairs"
+          ]
+        }
+      },
+      {
+        "name": "mumu_simulation_set",
+        "description": "Change the simulated android_id, mac_address or imei of an instance through MuMuManager simulation. Changes the identity the guest reports.",
+        "risk": "high",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "vmIndex": {
+              "type": "string",
+              "description": "Instance selector. Defaults to 0."
+            },
+            "simuKey": {
+              "type": "string",
+              "enum": [
+                "android_id",
+                "mac_address",
+                "imei"
+              ]
+            },
+            "simuValue": {
+              "type": "string",
+              "description": "New value, or __null__ to clear it."
+            }
+          },
+          "required": [
+            "simuKey",
+            "simuValue"
+          ]
+        }
+      },
+      {
+        "name": "mumu_patch_apply",
+        "description": "Apply the VIP patch table to nx_main\\winhttp.dll. Backs the file up first, verifies each point's original bytes, writes only the points that match, and reports applied/already/mismatch/skipped/gone counts. Refuses to write when nothing matches. Then optionally verifies the runtime point table against the target executables. Modifies the emulator installation.",
+        "risk": "high",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "root": {
+              "type": "string",
+              "description": "MuMu root folder. Omit to use the detected one."
+            },
+            "dryRun": {
+              "type": "boolean",
+              "description": "Report what would change without writing. Defaults to false."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_patch_restore",
+        "description": "Restore nx_main\\winhttp.dll from the most recent backup this plugin wrote, and report the before and after sha256. Modifies the emulator installation.",
+        "risk": "high",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "root": {
+              "type": "string",
+              "description": "MuMu root folder. Omit to use the detected one."
+            },
+            "backup": {
+              "type": "string",
+              "description": "Explicit backup file to restore from. Omit to use the newest one this plugin wrote."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_recover_dead_guest",
+        "description": "Recover an emulator whose guest Android framework has died: screencap hangs and uiautomator reports a missing window service. Terminates the instance process and the VM helper processes, waits until MuMuManager reports is_process_started false, launches the instance again, and verifies that dumpsys lists the activity service and wm size responds. Stops emulator processes.",
+        "risk": "high",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "vmIndex": {
+              "type": "string",
+              "description": "Instance selector. Defaults to 0."
+            },
+            "confirmed": {
+              "type": "boolean",
+              "description": "Must be true. The recovery kills processes, so the caller has to confirm intent explicitly."
+            }
+          },
+          "required": [
+            "confirmed"
+          ]
+        }
+      }
+    ]
+  }
+}

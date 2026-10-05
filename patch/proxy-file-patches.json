@@ -1,0 +1,73 @@
+{
+  "schema": "mumu-proxy-file-patches/1",
+  "description": "In-place corrections inside the deployed winhttp proxy DLL. Turns the 6.8.1-flavoured proxy orig table into the 6.8.2 one. Every entry is equal length; each orig is unique within the file (count == 1).",
+  "targetFile": "nx_main/winhttp.dll",
+  "sourceSha256": "ab9a0dbcef0cbd43c828d66c736909d49aec03e2006d25cf7e6edde141d6584b",
+  "resultSha256": "97dc6c4653277672a3376527f20d0c7ff18dee31ccbc0c78baa0c848a1c4547d",
+  "fileSize": 869888,
+  "patches": [
+    {
+      "id": "nxservice_parse_a_device_member_enabled",
+      "targetFileOffset": "0xA09D7",
+      "orig": "e8d02260ff",
+      "patch": "e8cb2260ff",
+      "rva": "0x0A0104E"
+    },
+    {
+      "id": "nxservice_parse_a_member_status_enabled",
+      "targetFileOffset": "0xA0A2B",
+      "orig": "e8132160ff",
+      "patch": "e80e2160ff",
+      "rva": "0x0A0120B"
+    },
+    {
+      "id": "nxservice_parse_a_trial_status_used",
+      "targetFileOffset": "0xA0A53",
+      "orig": "e8512060ff",
+      "patch": "e84c2060ff",
+      "rva": "0x0A012CD"
+    },
+    {
+      "id": "nxservice_parse_a_member_type_vip",
+      "targetFileOffset": "0xA0A79",
+      "orig": "e8da1f60ff",
+      "patch": "e8d51f60ff",
+      "rva": "0x0A01344"
+    },
+    {
+      "id": "nxservice_parse_a_is_valid_infos_true",
+      "targetFileOffset": "0xA0AA3",
+      "orig": "e800ad60ff",
+      "patch": "e8fbac60ff",
+      "rva": "0x0A014E4"
+    },
+    {
+      "id": "nxservice_parse_b_member_status_enabled",
+      "targetFileOffset": "0xA0AFC",
+      "orig": "e8a1ed5fff",
+      "patch": "e89ced5fff",
+      "rva": "0x0A0457D"
+    },
+    {
+      "id": "nxservice_parse_b_device_member_enabled",
+      "targetFileOffset": "0xA0B28",
+      "orig": "e84eed5fff",
+      "patch": "e849ed5fff",
+      "rva": "0x0A045D0"
+    },
+    {
+      "id": "nxservice_parse_b_trial_status_used",
+      "targetFileOffset": "0xA0B50",
+      "orig": "e8adeb5fff",
+      "patch": "e8a8eb5fff",
+      "rva": "0x0A04771"
+    },
+    {
+      "id": "nxservice_parse_b_member_type_vip",
+      "targetFileOffset": "0xA0B76",
+      "orig": "e8c6ea5fff",
+      "patch": "e8c1ea5fff",
+      "rva": "0x0A04858"
+    }
+  ]
+}
