@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.2.0 — 2026-10-06
+
+Documentation: the guest-side root path and module install.
+
+**Guest root without a GUI switch.** `MuMuManager sh` executes inside the guest as
+`uid=0(root)` / `context=u:r:nemuinit:s0`. Documented, together with the two settings
+that matter (`system_disk_readonly=false` for a writable `/system` overlay, and the
+fact that `root_permission` alone never produces a `su`).
+
+**KernelSU is already in the image.** `ksud 3.2.5` and `/data/adb/ksu` are present, so
+NeoZygisk and Vector install as KernelSU modules with no Magisk. Cold boot, then confirm
+`zygisk-ptrace64`, `zygiskd64` and `vectord`.
+
+**Enabling a module is a DB operation.** `modules.enabled` defaults to 0 and `scope` is
+empty; both have to be written in `/data/adb/lspd/config/modules_config.db`, and `lspd`
+caches the table at daemon start, so a cold boot is required — otherwise an "off"
+control arm is silently still on. The log file to check is
+`/data/adb/lspd/log/modules_*.log`.
+
+**De-adding an app that cannot be repackaged.** Why `addView` guards work on a hardened
+shell when class-name hooks do not, how to reach the real classloader from the view you
+just blocked, and why the right metric is the view tree (with a controlled A/B) rather
+than SDK log tags.
+
+New: `docs/guest-root-and-module-install.md`.
+
 ## 0.1.0 — 2026-10-05
 
 First release.

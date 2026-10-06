@@ -135,6 +135,21 @@ proof the runtime points actually landed:
 `mismatch` greater than zero means the build differs from the point table —
 that is the case the nine file corrections exist to fix.
 
+## Guest root and module install
+
+`MuMuManager sh` runs its command **inside the guest as uid 0**
+(`context=u:r:nemuinit:s0`), which means no graphical root switch and no Magisk are
+needed to work inside the VM. The image already ships KernelSU (`ksud 3.2.5`), so
+Zygisk-based Xposed modules — NeoZygisk for Zygisk, Vector for LSPosed — install
+through `ksud module install` and then have to be **enabled in
+`/data/adb/lspd/config/modules_config.db`**, not the UI, with a cold boot afterwards.
+
+That combination is what lets you de-ad an app that cannot be repackaged at all,
+because its signature is checked natively.
+
+Full procedure, including the two module shapes that work and the measurement
+discipline: [docs/guest-root-and-module-install.md](docs/guest-root-and-module-install.md).
+
 ## Scope
 
 The plugin does not ship or install MuMu itself, does not touch account state,
@@ -161,6 +176,19 @@ PI-Desktop 的 MuMu 安卓模拟器扩展。自动定位安装目录,驱动 MuMu
 - **半死 guest 恢复**:guest 安卓框架死掉时(screencap 挂死、dumpsys 报找不到
   window 服务),终止实例与 VM 辅助进程,等实例真停,再拉起,轮询直到 activity
   服务应答。
+
+## guest 侧 root 与模块安装
+
+`MuMuManager sh` 的命令是在 **guest 内以 uid 0 执行**的（`context=u:r:nemuinit:s0`），
+所以进 VM 干活既不需要图形界面的 root 开关，也不需要 Magisk。镜像本身就带 KernelSU
+（`ksud 3.2.5`），于是 Zygisk 系 Xposed 模块 —— Zygisk 引擎 NeoZygisk、LSPosed 继任者
+Vector —— 直接用 `ksud module install` 装，装完还必须**在
+`/data/adb/lspd/config/modules_config.db` 里启用**（不是界面里），然后冷启动一次。
+
+这条组合专门用来对付**根本没法重打包**的应用 —— 它的签名是在 native 层校验的。
+
+完整步骤（含两种真正有效的模块形态与量尺纪律）见
+[guest-root-and-module-install.md](docs/guest-root-and-module-install.md)。
 
 ## 安全
 
