@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.3.0 — 2026-10-07
+
+**Static patch, no proxy required.** The toolkit no longer depends on a
+user-supplied `winhttp.dll` to change client behaviour. `lib/static.js` applies the
+same fifty-two runtime points straight to the on-disk `MuMuNxMain.exe`,
+`MuMuNxService.exe` and `MuMuRemoteService.exe`, locating each point by the RVA in
+`patch/points.json` mapped through the parsed PE section table. Three new agent
+tools: `mumu_static_patch_status` (read-only, low risk), `mumu_static_patch_apply`
+and `mumu_static_patch_restore` (high risk). Every touched file is backed up with a
+timestamped copy plus an audit JSON, and a point whose original bytes are absent is
+skipped rather than forced.
+
+Stub points — where `patch` is shorter than `orig` — have the remainder of the
+original function body filled with NOPs, so the file size and every later offset are
+preserved. A running executable cannot be replaced, so stop MuMu before applying;
+`MuMuRemoteService` is a Windows service and has to be stopped as well.
+
+**Verifier fix.** `verifyRuntime()` compared a whole `orig`-length window against
+`patch` (three bytes on the two stub points in `MuMuNxMain.exe`), so those two could
+never be classified as applied and always showed as `mismatch`, even on a correctly
+patched file. It now compares only the leading `patch` bytes.
+
 ## 0.2.0 — 2026-10-06
 
 Documentation: the guest-side root path and module install.

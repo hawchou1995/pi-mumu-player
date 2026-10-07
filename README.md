@@ -53,6 +53,22 @@ Every write is preceded by a timestamped backup plus a JSON audit record beside
 the target. A point whose original bytes are absent, or present more than once,
 is skipped and reported — never forced.
 
+**Patches the binaries directly — no proxy needed.** The fifty-two runtime points
+are not only applied in memory by the proxy; they can be written straight into
+`nx_main\MuMuNxMain.exe`, `MuMuNxService.exe` and `MuMuRemoteService.exe` on disk.
+`lib/static.js` locates every point by the RVA recorded in `patch/points.json`,
+mapped through the parsed PE section table, so it does not have to trust a stale
+offset. `mumu_static_patch_status` reports the state read-only;
+`mumu_static_patch_apply` writes, backing up each file first and dropping an audit
+JSON beside the backup; `mumu_static_patch_restore` puts the newest backup back.
+This route needs no supplied `winhttp.dll` at all.
+
+Two points in `MuMuNxMain.exe` are stubs: `patch` is three bytes (`mov al,1; ret`)
+while `orig` is the whole original function body. Those write the three bytes and
+fill the remainder with NOPs, so the file size and every later offset stay intact.
+A running executable cannot be replaced, so stop MuMu first — and `MuMuRemoteService`
+is a Windows service, so stop that too.
+
 **Recovers a dead guest.** When the guest Android framework has died —
 `screencap` hangs, `dumpsys` reports a missing window service — the recovery
 terminates the instance and its VM helper processes, waits until MuMuManager

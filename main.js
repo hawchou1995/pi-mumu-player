@@ -15,6 +15,7 @@ const path = require('node:path');
 
 const mumu = require('./lib/mumu');
 const patchEngine = require('./lib/patch');
+const staticEngine = require('./lib/static');
 
 const PLUGIN_ROOT = __dirname;
 const COMMAND_ID = 'hawchou.mumu-player.open';
@@ -536,6 +537,42 @@ function toolDefs() {
       async execute(args) {
         const root = await resolveRoot(args.root);
         const report = await recoverDeadGuest(root, args.vmIndex || '0', Boolean(args.confirmed));
+        return succeed(report);
+      },
+    },
+    {
+      name: 'mumu_static_patch_status',
+      async execute(args) {
+        const root = await resolveRoot(args.root);
+        const table = staticEngine.readPoints(PLUGIN_ROOT);
+        const report = staticEngine.scan(root, table.points);
+        report.pointsFile = table.file;
+        report.targetVersion = table.doc.targetVersion || null;
+        report.backups = staticEngine.listBackups(root);
+        return succeed(report);
+      },
+    },
+    {
+      name: 'mumu_static_patch_apply',
+      async execute(args) {
+        const root = await resolveRoot(args.root);
+        const table = staticEngine.readPoints(PLUGIN_ROOT);
+        const report = staticEngine.apply(root, table.points, {
+          dryRun: Boolean(args.dryRun),
+          backupBase: args.backupBase || null,
+        });
+        return succeed(report);
+      },
+    },
+    {
+      name: 'mumu_static_patch_restore',
+      async execute(args) {
+        const root = await resolveRoot(args.root);
+        const backups = staticEngine.listBackups(root);
+        const backupDir = args.backupDir || (backups[0] && backups[0].dir);
+        if (!backupDir) return fail(new Error('no static-patch backup folder found'));
+        const report = staticEngine.restore(root, backupDir);
+        report.after = staticEngine.scan(root, staticEngine.readPoints(PLUGIN_ROOT).points).totals;
         return succeed(report);
       },
     },

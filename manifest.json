@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "hawchou.mumu-player",
   "name": "MuMu Player Toolkit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Locate a MuMu Android emulator installation, drive the whole MuMuManager command surface, and keep the winhttp proxy VIP patch table in sync with the installed build. Detection is automatic with a manual root override as the fallback. The patch engine backs up before every write, skips any point whose original bytes do not match, and can restore the previous file. The bundled documentation also covers the guest-side root path (MuMuManager sh runs as uid 0 inside the VM) and installing KernelSU modules such as NeoZygisk and Vector.",
   "author": "hawchou1995",
   "license": "MIT",
@@ -404,6 +404,60 @@
           "required": [
             "confirmed"
           ]
+        }
+      },
+      {
+        "name": "mumu_static_patch_status",
+        "risk": "low",
+        "description": "Report the static-patch state of the MuMu client executables. Reads patch/points.json, maps every point’s RVA through the parsed PE section table, and classifies each one as match (original bytes still present, patchable), already (patch present), mismatch or gone. Writes nothing. This is the no-proxy route: the same fifty-two points the winhttp proxy would apply in memory are applied straight to the files on disk.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "root": {
+              "type": "string",
+              "description": "MuMu root folder to inspect. Omit to use the detected one."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_static_patch_apply",
+        "risk": "high",
+        "description": "Apply the fifty-two runtime points from patch/points.json directly to the on-disk MuMu executables, so the patch takes effect without the user-supplied winhttp proxy. Backs up every file it touches and writes an audit JSON beside the backup. Points whose original bytes are absent are skipped, never forced. Stub points (patch shorter than orig) have the remainder of the original function body NOP-filled so file size and all other offsets stay intact. Stop MuMu before applying: a running executable cannot be replaced.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "root": {
+              "type": "string",
+              "description": "MuMu root folder. Omit to use the detected one."
+            },
+            "dryRun": {
+              "type": "boolean",
+              "description": "When true, report what would be written and touch nothing."
+            },
+            "backupBase": {
+              "type": "string",
+              "description": "Folder that receives a timestamped backup subfolder. Defaults to a mumu-static-backups folder beside the MuMu root."
+            }
+          }
+        }
+      },
+      {
+        "name": "mumu_static_patch_restore",
+        "risk": "high",
+        "description": "Restore the MuMu client executables from a static-patch backup folder, and re-report the static-patch state afterwards. Defaults to the newest backup under the mumu-static-backups folder beside the MuMu root.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "root": {
+              "type": "string",
+              "description": "MuMu root folder. Omit to use the detected one."
+            },
+            "backupDir": {
+              "type": "string",
+              "description": "Backup folder written by mumu_static_patch_apply. Omit to use the newest one."
+            }
+          }
         }
       }
     ]
