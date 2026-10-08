@@ -170,7 +170,9 @@ async function main() {
   out.push('account     ' + (who && who.username) + '  role=' + (who && who.role) + '  uploadsToday=' + (who && who.uploadsToday) + '/' + (who && who.uploadLimit));
 
   const mine = await rpc('list_plugins', {}, token);
-  const existing = ((mine && mine.plugins) || []).find((entry) => entry.id === manifest.id);
+  const existing = ((mine && mine.plugins) || []).find(
+    (entry) => (entry.pluginId || entry.id) === manifest.id,
+  );
   out.push('exists      ' + (existing ? 'yes (' + JSON.stringify(existing.versions || existing).slice(0, 120) + ')' : 'no'));
 
   let repository = repositoryFlag;
