@@ -23,3 +23,15 @@ overlay, the KernelSU that ships with the image, `ksud module install` for NeoZy
 Vector, enabling modules through `modules_config.db` plus a cold boot, and how to tell
 "injected" from "inert" (the verbatim Vector loading chain, and a controlled A/B on the
 view tree rather than on log tags).
+
+## mobile-browser-lab.md
+
+Hand-written. What runs inside the MuMu Android 12 image and what does not: the browser matrix
+against the ARM translation layer, the Google stack (Play services 24.42.33 and Play Store
+23.7.11-21 installed through MuMu's own Google installer) plus the measured fact that it changes
+nothing about the arm64-Chromium crash, the end-to-end path from an APK download to a verified
+result, and a seventeen-row trap table — including the one that matters most for automation:
+Tampermonkey 5.3.1 opens its install page for `https://…/x.user.js` only, never for `http://`.
+It also documents reading Tampermonkey's own IndexedDB offline (guest root, no UI) to learn which
+userscripts are installed and which URLs they cover, which is how the capture regression below
+decides between its two install routes.

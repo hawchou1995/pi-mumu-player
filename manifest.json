@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "hawchou.mumu-player",
   "name": "MuMu Player Toolkit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Locate a MuMu Android emulator installation, drive the whole MuMuManager command surface, and keep the winhttp proxy VIP patch table in sync with the installed build. Detection is automatic with a manual root override as the fallback. The patch engine backs up before every write, skips any point whose original bytes do not match, and can restore the previous file. The bundled documentation also covers the guest-side root path (MuMuManager sh runs as uid 0 inside the VM) and installing KernelSU modules such as NeoZygisk and Vector.",
   "author": "hawchou1995",
   "license": "MIT",

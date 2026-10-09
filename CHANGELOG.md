@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.1 — 2026-10-09
+
+Documentation only: the mobile browser bench.
+
+**`docs/mobile-browser-lab.md`.** The MuMu Android 12 browser matrix and the rule behind it —
+the translation layer only executes Dalvik/ARM bytecode, so pure-Java browsers and browsers that
+delegate rendering to the system WebView run, while anything shipping its own arm64 Chromium
+(`libchrome.so`, 188,617,928 B) dies at startup with a stable SIGSEGV fingerprint
+(`#07 libchrome.so …LibraryLoader_1libraryLoaded+68` → `#08 /system/lib64/arm64/nb/libtcb.so`).
+Includes the Google stack (Play services 24.42.33, Play Store 23.7.11-21, both from MuMu's own
+Google installer) and the measured result that installing it changes nothing about that crash —
+same PC, same BuildId, same call stack. Plus the end-to-end path from APK download to verified
+result (including the first-run wizard that silently eats VIEW intents if it is not finished),
+a seventeen-row trap table, and a section on reading Tampermonkey's IndexedDB offline with guest
+root: the storage keys are alphabet-shifted by -1, and `0@re$<id>` holds a script's `@match`/`@include`.
+
+The one finding that constrains automation: **Tampermonkey 5.3.1 inside Yujian International opens
+its install page for `https://…/x.user.js` only, never for `http://`.** A/B on one machine, one
+script, one path, changing only the scheme: `https://update.greasyfork.org/scripts/598793/….user.js`
+→ install page (tab count 1 → 2); the `http://` URL → the script rendered as plain source, and
+Tampermonkey's background page never came back for the script at all (the fake backend logged
+exactly one GET — the browser navigation — with `Accept: text/html,…`).
+
+No code change; this release only adds documentation.
+
 ## 0.3.0 — 2026-10-07
 
 **Static patch, no proxy required.** The toolkit no longer depends on a
